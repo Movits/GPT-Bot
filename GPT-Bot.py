@@ -35,7 +35,7 @@ def generate_response(prompt, engine, conversation_id):
     }
 
     if conversation_id in conversation_history:
-        data['prompt'] = '\n'.join(conversation_history[conversation_id]) + '\n' + data['prompt']
+        data['prompt'] = '\n'.join(conversation_history[conversation_id][-2]) + '\n' + data['prompt']
 
     gpt_api_url = f'https://api.openai.com/v1/engines/{engine}/completions'
     response = requests.post(gpt_api_url, headers=headers, json=data)
@@ -45,8 +45,7 @@ def generate_response(prompt, engine, conversation_id):
     if conversation_id not in conversation_history:
         conversation_history[conversation_id] = []
 
-    conversation_history[conversation_id].append(prompt)
-    conversation_history[conversation_id].append(response_text)
+    conversation_history[conversation_id] = conversation_history[conversation_id][-2:] + [prompt, response_text]
 
     return response_text
 
