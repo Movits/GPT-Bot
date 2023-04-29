@@ -35,7 +35,7 @@ def generate_response(prompt, engine, conversation_id):
     }
 
     if conversation_id in conversation_history:
-        data['choices'] = conversation_history[conversation_id]
+        data['prompt'] = '\n'.join(conversation_history[conversation_id]) + '\n' + data['prompt']
 
     gpt_api_url = f'https://api.openai.com/v1/engines/{engine}/completions'
     response = requests.post(gpt_api_url, headers=headers, json=data)
